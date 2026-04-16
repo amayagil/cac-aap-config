@@ -1,0 +1,14 @@
+---
+hub_collection_repositories:
+  - name: rh-certified
+    remote: rh-certified
+    wait: false
+    interval: 15
+  - name: community
+    remote: community
+    wait: false
+    interval: 15
+  - name: validated
+    remote: validated
+    wait: false
+    interval: 15

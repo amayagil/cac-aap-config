@@ -6,6 +6,7 @@ controller_projects:
     scm_url: "https://github.com/amayagil/cac-aap-config.git"
     scm_branch: main
     scm_credential: "GitHub Amaya Token"
+    scm_verify_ssl: false
     wait: true
 
   - name: "Role: RHSM Registration"
@@ -13,15 +14,19 @@ controller_projects:
     scm_type: git
     scm_url: "https://gitlab.com/ansible-ssa/role-rhsm-registration.git"
     scm_credential: "GitLab Amaya Pass"
+    scm_verify_ssl: false
+
 
   - name: "Role: Insights Registration"
     organization: "Default"
     scm_type: git
     scm_url: "https://gitlab.com/ansible-ssa/role-insights-registration.git"
     scm_credential: "GitLab Amaya Pass"
+    scm_verify_ssl: false
 
   - name: "Role: RHEL 10 Upgrader"
     organization: "Default"
     scm_type: git
     scm_url: "https://gitlab.com/ansible-ssa/role-rhel10-upgrader"
     scm_credential: "GitLab Amaya Pass"
+    scm_verify_ssl: false

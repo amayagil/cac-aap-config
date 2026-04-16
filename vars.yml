@@ -14,4 +14,10 @@ quay_registry_password: "{{ vault_quay_registry_password }}"
 rhsm_username: "{{ vault_rhsm_username }}"
 rhsm_password: "{{ vault_rhsm_password }}"
 rhsm_offline_token: "{{ vault_rhsm_offline_token }}"
+gitlab_username: "{{ vault_gitlab_username }}"
+gitlab_token: "{{ vault_gitlab_token }}"
+github_username: "{{ vault_github_username }}"
+github_token: "{{ vault_github_token }}"
+machine_username: "root"
+
 #rhaap_manifest: '{{ lookup("file","/path/to/your/manifest.zip") }}'

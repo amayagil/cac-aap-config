@@ -3,24 +3,22 @@
   hosts: localhost
   connection: local
   vars:
-    # Mapeo de variables de vault o entorno a variables internas del playbook
-    validate_certs: "{{ (vault_controller_validate_certs | default(lookup('env', 'CONTROLLER_VERIFY_SSL'))) | bool }}"
-    aap_username: "{{ vault_controller_username | default(lookup('env', 'CONTROLLER_USERNAME')) }}"
-    aap_password: "{{ vault_controller_password | default(lookup('env', 'CONTROLLER_PASSWORD')) }}"
-    aap_hostname: "{{ vault_controller_hostname | default(lookup('env', 'CONTROLLER_HOST')) }}"
-    
-  # variables que el rol 'dispatch' realmente busca
-    controller_hostname: "{{ aap_hostname }}"
-    controller_username: "{{ aap_username }}"
-    controller_password: "{{ aap_password }}"
-    controller_validate_certs: "{{ validate_certs }}"
+    # Lógica de cálculo con nombres únicos (aap_) para evitar recursividad
+    # El default(controller_hostname) tomará el valor del fichero vars.yml (vía -e)
+    aap_hostname: "{{ vault_controller_hostname | default(lookup('env', 'CONTROLLER_HOST')) | default(controller_hostname) }}"
+    aap_username: "{{ vault_controller_username | default(lookup('env', 'CONTROLLER_USERNAME')) | default(controller_username) }}"
+    aap_password: "{{ vault_controller_password | default(lookup('env', 'CONTROLLER_PASSWORD')) | default(controller_admin_password) }}"
+    aap_validate_certs: "{{ (vault_controller_validate_certs | default(lookup('env', 'CONTROLLER_VERIFY_SSL')) | default(false)) | bool }}"
 
   pre_tasks:
-    # Cargamos primero los secretos si no se pasan por -e (opcional, pero ayuda a la consistencia)
-    - name: Ensure secrets are loaded
-      ansible.builtin.include_vars:
-        file: vars_secrets.yml
-      failed_when: false # No falla si ya lo pasaste por línea de comandos
+    # Puente de compatibilidad: Mapeamos los resultados a los nombres que el rol 'infra'
+    # y las tareas asíncronas buscan internamente para evitar el error de 127.0.0.1
+    - name: "AAP 2.6 | Bridge calculated vars to role expected vars"
+      ansible.builtin.set_fact:
+        controller_hostname: "{{ aap_hostname }}"
+        controller_username: "{{ aap_username }}"
+        controller_password: "{{ aap_password }}"
+        controller_validate_certs: "{{ aap_validate_certs }}"
 
     - name: Include vars from platform_configuration directory
       ansible.builtin.include_vars:

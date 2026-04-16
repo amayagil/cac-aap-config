@@ -3,9 +3,10 @@ Configuration as Code for AAP
 
 Ejecución en Linux:
 `ansible-navigator run dispatch_config.yml \
-  -e "@vars.yml" \
-  -e "@vars_secrets.yml" \
-  --ask-vault-pass`
+-e "@vars.yml" \
+-e "@vars_secrets.yml" \
+--ask-vault-pass \
+-m stdout`
 
 Ejecución en Mac OS:
 `ansible-playbook dispatch_config.yml -e "@vars_secrets.yml" --ask-vault-pass`

@@ -3,6 +3,8 @@ ansible-navigator:
     image: quay.io/redhat_emp1/ee-ansible-ssa
     pull:
       policy: missing
+    container-options:
+      - "--network=host"
     environment-variables:
       pass:
         - CONTROLLER_HOST
@@ -10,6 +12,7 @@ ansible-navigator:
         - CONTROLLER_PASSWORD
         - CONTROLLER_VERIFY_SSL
         - CONTROLLER_API_PATH
+        - PYTHONHTTPSVERIFY
     #volume-mounts:
     #  - src: "/home/amaya/.ansible/collections"
     #    dest: "/home/runner/.ansible/collections" # No tocar esto, es la clave

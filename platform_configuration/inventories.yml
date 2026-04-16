@@ -1,0 +1,5 @@
+---
+controller_inventories:
+  - name: "NUC Inventory"
+    description: "Inventário para as máquinas gazpacho e torrezno"
+    organization: "Default" # Certifica-te de que a organização existe (ex: "Amaya" ou "Default")
