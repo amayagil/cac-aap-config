@@ -1,0 +1,5 @@
+- name: Register to Insights
+  hosts: all
+  become: true
+  roles:
+    - role-insights-registration

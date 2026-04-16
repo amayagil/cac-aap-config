@@ -1,0 +1,5 @@
+- name: Register to RHSM
+  hosts: all
+  become: true
+  roles:
+    - role-rhsm-registration

@@ -1,0 +1,5 @@
+- name: Execute RHEL 10 Upgrade
+  hosts: all
+  become: true
+  roles:
+    - role-rhel10-upgrader

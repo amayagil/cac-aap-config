@@ -1,0 +1,7 @@
+---
+aap_organizations:
+  - name: ACME
+    description: ACME inc. Organization
+
+  - name: Amaya
+    description: Amaya Organization

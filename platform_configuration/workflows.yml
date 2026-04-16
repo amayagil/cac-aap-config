@@ -1,0 +1,23 @@
+---
+controller_workflows:
+  - name: "WORKFLOW: Leapp-O-Matic RHEL 10 Migration"
+    organization: "Default"
+    workflow_nodes:
+      - identifier: "node_preflight"
+        unified_job_template: "Leapp: 01 - Preflight"
+      
+      - identifier: "node_rhsm"
+        unified_job_template: "Leapp: 02 - RHSM Registration"
+        parent_nodes: ["node_preflight"]
+
+      - identifier: "node_insights"
+        unified_job_template: "Leapp: 03 - Insights Registration"
+        parent_nodes: ["node_rhsm"]
+
+      - identifier: "node_upgrade"
+        unified_job_template: "Leapp: 04 - Upgrade Execution"
+        parent_nodes: ["node_insights"]
+
+      - identifier: "node_post_upgrade"
+        unified_job_template: "Leapp: 05 - Post-Upgrade Verification"
+        parent_nodes: ["node_upgrade"]

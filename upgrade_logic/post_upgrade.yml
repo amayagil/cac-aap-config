@@ -1,0 +1,9 @@
+---
+- name: Executing Role Post-Upgrade
+  hosts: all
+  become: true
+  tasks:
+    - name: Run post-upgrade tasks from role
+      ansible.builtin.include_role:
+        name: role-rhel10-upgrader
+        tasks_from: post_upgrade.yml

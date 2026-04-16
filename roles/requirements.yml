@@ -1,0 +1,11 @@
+---
+roles:
+  - name: role-rhsm-registration
+    src: https://gitlab.com/ansible-ssa/role-rhsm-registration.git
+    scm: git
+  - name: role-insights-registration
+    src: https://gitlab.com/ansible-ssa/role-insights-registration.git
+    scm: git
+  - name: role-rhel10-upgrader
+    src: https://gitlab.com/ansible-ssa/role-rhel10-upgrader.git
+    scm: git

@@ -1,0 +1,9 @@
+---
+- name: Executing Role Preflight
+  hosts: all
+  become: true
+  tasks:
+    - name: Run preflight tasks from role
+      ansible.builtin.include_role:
+        name: role-rhel10-upgrader
+        tasks_from: preflight.yml

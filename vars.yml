@@ -1,0 +1,17 @@
+caap_fqdn: ansibol.cibeles.me
+# look for ansible-automation-platform-containerized-setup in /tmp (OPTIONAL)
+# caap_install_dir: /tmp
+controller_username: "admin"
+controller_admin_password: "{{ vault_controller_admin_password }}"
+# do not deploy Let's encrypt certificates
+# set this to false if you have DynDNS set up
+letsencrypt_skip: true
+letsencrypt_staging: true
+# Configuración de Quay para los Execution Environments
+quay_registry_username: "{{ vault_quay_registry_username }}"
+quay_registry_password: "{{ vault_quay_registry_password }}"
+# Credenciales para las RHN
+rhsm_username: "{{ vault_rhsm_username }}"
+rhsm_password: "{{ vault_rhsm_password }}"
+rhsm_offline_token: "{{ vault_rhsm_offline_token }}"
+#rhaap_manifest: '{{ lookup("file","/path/to/your/manifest.zip") }}'

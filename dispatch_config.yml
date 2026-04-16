@@ -1,0 +1,32 @@
+---
+- name: Playbook to configure AAP post installation (Leapp-O-Matic Edition)
+  hosts: localhost
+  connection: local
+  vars:
+    # Mapeo de variables de vault o entorno a variables internas del playbook
+    validate_certs: "{{ (vault_controller_validate_certs | default(lookup('env', 'CONTROLLER_VERIFY_SSL'))) | bool }}"
+    aap_username: "{{ vault_controller_username | default(lookup('env', 'CONTROLLER_USERNAME')) }}"
+    aap_password: "{{ vault_controller_password | default(lookup('env', 'CONTROLLER_PASSWORD')) }}"
+    aap_hostname: "{{ vault_controller_hostname | default(lookup('env', 'CONTROLLER_HOST')) }}"
+    
+  # variables que el rol 'dispatch' realmente busca
+    controller_hostname: "{{ aap_hostname }}"
+    controller_username: "{{ aap_username }}"
+    controller_password: "{{ aap_password }}"
+    controller_validate_certs: "{{ validate_certs }}"
+
+  pre_tasks:
+    # Cargamos primero los secretos si no se pasan por -e (opcional, pero ayuda a la consistencia)
+    - name: Ensure secrets are loaded
+      ansible.builtin.include_vars:
+        file: vars_secrets.yml
+      failed_when: false # No falla si ya lo pasaste por línea de comandos
+
+    - name: Include vars from platform_configuration directory
+      ansible.builtin.include_vars:
+        dir: ./platform_configuration/
+        ignore_files: [controller_config.yml.template]
+        extensions: ["yml"]
+
+  roles:
+    - infra.aap_configuration.dispatch

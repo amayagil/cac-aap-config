@@ -1,0 +1,36 @@
+---
+controller_templates:
+  - name: "Leapp: 01 - Preflight"
+    project: "CaC - Configuración de Plataforma"
+    playbook: "upgrade_logic/preflight.yml"
+    inventory: "NUC Inventory"
+    credentials: ["NUC Machine Credential"]
+    ask_variables_on_launch: true
+
+  - name: "Leapp: 02 - RHSM Registration"
+    project: "CaC - Configuración de Plataforma"
+    playbook: "upgrade_logic/run_rhsm.yml"
+    inventory: "NUC Inventory"
+    credentials: ["NUC Machine Credential"]
+    extra_vars:
+      rhsm_username: "{{ gitlab_username }}" # Usando tu variable de vars.yml
+      rhsm_password: "{{ vault_rhsm_password }}"
+
+  - name: "Leapp: 03 - Insights Registration"
+    project: "CaC - Configuración de Plataforma"
+    playbook: "upgrade_logic/run_insights.yml"
+    inventory: "NUC Inventory"
+    credentials: ["NUC Machine Credential"]
+
+  - name: "Leapp: 04 - Upgrade Execution"
+    project: "CaC - Configuración de Plataforma"
+    playbook: "upgrade_logic/run_upgrade.yml"
+    inventory: "NUC Inventory"
+    credentials: ["NUC Machine Credential"]
+    timeout: 3600
+
+  - name: "Leapp: 05 - Post-Upgrade Verification"
+    project: "CaC - Configuración de Plataforma"
+    playbook: "upgrade_logic/post_upgrade.yml"
+    inventory: "NUC Inventory"
+    credentials: ["NUC Machine Credential"]

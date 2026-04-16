@@ -1,0 +1,8 @@
+---
+aap_user_accounts:
+  - username: amaya
+    password: "{{ controller_admin_password }}"
+    update_secrets: false
+
+  - username: acme_operator
+    password: "{{ controller_admin_password }}"
