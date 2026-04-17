@@ -2,22 +2,63 @@
 controller_workflows:
   - name: "WORKFLOW: Leapp-O-Matic RHEL 10 Migration"
     organization: "Default"
+    destroy_current_nodes: true
     workflow_nodes:
       - identifier: "node_preflight"
-        unified_job_template: "Leapp: 01 - Preflight"
-      
+        unified_job_template:
+          name: "Leapp: 01 - Preflight"
+          type: job_template
+          organization:
+            name: "Default"
+        related:
+          success_nodes:
+            - identifier: "node_rhsm"
+          failure_nodes: []
+          always_nodes: []
+
       - identifier: "node_rhsm"
-        unified_job_template: "Leapp: 02 - RHSM Registration"
-        parent_nodes: ["node_preflight"]
+        unified_job_template:
+          name: "Leapp: 02 - RHSM Registration"
+          type: job_template
+          organization:
+            name: "Default"
+        related:
+          success_nodes:
+            - identifier: "node_insights"
+          failure_nodes: []
+          always_nodes: []
 
       - identifier: "node_insights"
-        unified_job_template: "Leapp: 03 - Insights Registration"
-        parent_nodes: ["node_rhsm"]
+        unified_job_template:
+          name: "Leapp: 03 - Insights Registration"
+          type: job_template
+          organization:
+            name: "Default"
+        related:
+          success_nodes:
+            - identifier: "node_upgrade"
+          failure_nodes: []
+          always_nodes: []
 
       - identifier: "node_upgrade"
-        unified_job_template: "Leapp: 04 - Upgrade Execution"
-        parent_nodes: ["node_insights"]
+        unified_job_template:
+          name: "Leapp: 04 - Upgrade Execution"
+          type: job_template
+          organization:
+            name: "Default"
+        related:
+          success_nodes:
+            - identifier: "node_post_upgrade"
+          failure_nodes: []
+          always_nodes: []
 
       - identifier: "node_post_upgrade"
-        unified_job_template: "Leapp: 05 - Post-Upgrade Verification"
-        parent_nodes: ["node_upgrade"]
+        unified_job_template:
+          name: "Leapp: 05 - Post-Upgrade Verification"
+          type: job_template
+          organization:
+            name: "Default"
+        related:
+          success_nodes: []
+          failure_nodes: []
+          always_nodes: []
