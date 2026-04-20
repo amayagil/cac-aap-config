@@ -1,0 +1,15 @@
+---
+# roles/role-rhel10-upgrader/tasks/update.yml
+
+- name: Update all packages to the latest available versions
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+    update_cache: true
+  register: update_result
+
+- name: Reboot the system if a reboot is required after updates
+  ansible.builtin.reboot:
+    reboot_timeout: 300
+  when: update_result.changed
+

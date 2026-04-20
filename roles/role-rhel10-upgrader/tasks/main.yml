@@ -1,0 +1,17 @@
+---
+# tasks/main.yml for role-rhel10-upgrader
+
+- name: Perform pre-flight checks for RHEL 10 upgrade
+  ansible.builtin.include_tasks: preflight.yml
+
+- name: Configure repositories and lock release version
+  ansible.builtin.include_tasks: repositories.yml
+
+- name: Update all packages to the latest available versions
+  ansible.builtin.include_tasks: update.yml
+
+- name: Perform the RHEL 10 upgrade
+  ansible.builtin.include_tasks: upgrade.yml
+
+- name: Perform the RHEL 10 post upgrade
+  ansible.builtin.include_tasks: post_upgrade.yml

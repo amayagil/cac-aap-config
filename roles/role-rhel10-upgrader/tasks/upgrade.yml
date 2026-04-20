@@ -1,0 +1,35 @@
+---
+# roles/role-rhel10-upgrader/tasks/upgrade.yml
+
+- name: Installing LEAPP tools for RHEL 10 upgrade
+  ansible.builtin.dnf:
+    name: leapp-upgrade-el9toel10
+    state: present
+
+- name: Running pre-upgrade checks with LEAPP
+  ansible.builtin.command: leapp preupgrade
+  register: preupgrade_result
+  changed_when: false
+  ignore_errors: true
+
+- name: Fetch pre-upgrade report
+  ansible.builtin.fetch:
+    src: /var/log/leapp/leapp-report.json
+    dest: ./leapp-report-{{ inventory_hostname }}.json
+    flat: yes
+
+- name: Fail if pre-upgrade checks did not pass
+  ansible.builtin.fail:
+    msg: "Pre-upgrade checks failed. Please review the report for details."
+  when: preupgrade_result.rc != 0
+
+- name: Running the RHEL 10 upgrade with LEAPP
+  ansible.builtin.command: leapp upgrade
+  register: upgrade_result
+  changed_when: upgrade_result.rc == 0
+  failed_when: upgrade_result.rc != 0
+
+- name: Reboot the system to complete the upgrade
+  ansible.builtin.reboot:
+    reboot_timeout: 3600
+  when: upgrade_result.rc == 0

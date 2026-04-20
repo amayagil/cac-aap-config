@@ -1,0 +1,141 @@
+---
+# roles/role-rhel10-upgrader/tasks/post_upgrade.yml
+
+  # Resetting to generic python3 because /usr/bin/python3.9 is gone
+  - name: Handle Python interpreter change for RHEL 10
+    set_fact:
+      ansible_python_interpreter: /usr/bin/python3
+
+  # Force a flush of all facts after reboot
+  - name: Refresh facts after reboot
+    ansible.builtin.setup:
+
+  - name: Verify Core OS State
+    # If OS version is not RHEL 10 or kernel is not the expected RHEL 10 kernel
+    # abort execution with failed state
+    block:
+      - name: Check if OS is RHEL 10
+        set_fact:
+          upgrade_issues: "{{ upgrade_issues + ['OS version is ' + ansible_distribution_version + ' instead of 10'] }}"
+        when: ansible_distribution_major_version != "10"
+
+      - name: Check for correct kernel version
+        set_fact:
+          upgrade_issues: "{{ upgrade_issues + ['Kernel version is ' + ansible_kernel + ' instead of expected RHEL 10 kernel'] }}"
+        when: "'el10' not in ansible_kernel"
+
+      - name: Abort if critical upgrade issues were found
+        ansible.builtin.fail:
+          msg: "Critical issues detected! Stopping cleanup to prevent data loss."
+        when: upgrade_issues | length > 0
+
+  - block:
+    # Check for other potential soft issues that may require manual intervention
+    - name: Check for correct repos for RHEL 10
+      ansible.builtin.command: subscription-manager repos --list-enabled
+      register: repos_output
+
+    - name: Validate RHEL 10 repositories
+      set_fact:
+        upgrade_issues: "{{ upgrade_issues + ['Missing RHEL 10 repositories'] }}"
+      when: "'rhel-10-for-x86_64-baseos-rpms' not in repos_output.stdout"
+
+    - name: Get required GPG fingerprints from the filesystem
+      # || true ensure command succeds even if no keys are found, preventing the play from failing at this step
+      ansible.builtin.shell: "gpg --show-keys --with-colons /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release | grep '^fpr' | cut -d: -f10 || true"
+      register: gpg_public_keys
+      changed_when: false
+
+    - name: Extract short key IDs and prepare for comparison
+      set_fact:
+        # map('regex_replace', ...) applies the transformation to every item in the list
+        # map('lower') converts IDs to lowercase to match the 'rpm -q' output format
+        # | list converts the processed data back into a standard list structure
+        gpg_key_ids: "{{ gpg_public_keys.stdout_lines | map('regex_replace', '^.*(.{8})$', '\\1') | map('lower') | list }}"
+
+    - name: Get list of currently trusted GPG keys in RPM DB
+      ansible.builtin.command: rpm -q gpg-pubkey
+      register: installed_gpg_keys
+      changed_when: false
+
+    - name: Validate each required key is in the RPM database
+      set_fact:
+        upgrade_issues: "{{ upgrade_issues + ['Missing GPG key: ' + item] }}"
+      # We loop through our extracted IDs and check if each is missing from the RPM output
+      loop: "{{ gpg_key_ids }}"
+      when: "item not in installed_gpg_keys.stdout"
+
+    - name: Check for failed systemd services
+      ansible.builtin.command: systemctl list-units --state=failed --plain --no-legend
+      register: failed_services
+
+    - name: Add failed services to issues list
+      set_fact:
+        upgrade_issues: "{{ upgrade_issues + ['Failed systemd services: ' + failed_services.stdout] }}"
+      when: failed_services.stdout != ""
+
+    - name: Remove leapp packages after upgrade
+      vars:
+        leapp_packages:
+          - leapp-upgrade-el10
+          - python3-leapp
+          - leapp
+      ansible.builtin.dnf:
+        name: "{{ leapp_packages }}"
+        state: absent
+      ignore_errors: true
+      register: leapp_removal
+
+    - name: Check if leapp packages were removed successfully
+      set_fact:
+        upgrade_issues: "{{ upgrade_issues + ['Failed to remove leapp packages: ' + leapp_removal.msg] }}"
+      when: leapp_removal.failed
+
+    - name: Clean the cache after removing leapp packages
+      ansible.builtin.dnf:
+        name: "leapp"
+        state: absent
+        autoremove: yes
+        update_cache: yes
+      ignore_errors: true
+      register: dnf_cleanup
+
+    - name: Check if DNF cleanup was successful
+      set_fact:
+        upgrade_issues: "{{ upgrade_issues + ['Failed to clean DNF cache after removing leapp packages: ' + dnf_cleanup.msg] }}"
+      when: dnf_cleanup.failed
+
+    - name: Purge all DNF metadata and cache
+      ansible.builtin.command: dnf clean all
+      ignore_errors: true
+      register: dnf_clean_all
+
+    - name: Check if DNF clean all was successful
+      set_fact:
+        upgrade_issues: "{{ upgrade_issues + ['Failed to clean all DNF metadata and cache: ' + dnf_clean_all.msg | default(dnf_clean_all.stderr)] }}"
+      when: dnf_clean_all.failed
+
+    - name: Locate configuration conflict files
+      ansible.builtin.find:
+        paths: /etc
+        patterns: "^.*\\.rpmnew$|^.*\\.rpmsave$"
+        use_regex: yes
+        recurse: yes
+      register: config_conflicts
+
+    - name: Add configuration conflicts to issues list
+      set_fact:
+        upgrade_issues: "{{ upgrade_issues + ['Configuration conflicts found: ' + config_conflicts.files | map(attribute='path') | join(', ')] }}"
+      when: config_conflicts.files | length > 0
+
+    - name: Save upgrade issues to a report file
+      ansible.builtin.copy:
+        content: "{{ upgrade_issues | join('\n') }}"
+        dest: /root/upgrade_report.txt
+        mode: '0644'
+      when: upgrade_issues | length > 0
+
+    - name: Halt play and display upgrade issues
+      ansible.builtin.debug:
+        msg: "WARNING: Upgrade completed with the following issues: \n{{ upgrade_issues | join('\n') }}"
+      when: upgrade_issues | length > 0

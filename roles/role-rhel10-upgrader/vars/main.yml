@@ -1,0 +1,6 @@
+---
+# role-rhel10-upgrader/vars/main.yml
+
+rhsm_repositories:
+  -  rhel-9-for-x86_64-baseos-rpms
+  -  rhel-9-for-x86_64-appstream-rpms
