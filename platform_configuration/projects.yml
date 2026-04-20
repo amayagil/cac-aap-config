@@ -7,6 +7,7 @@ controller_projects:
     scm_branch: main
     scm_credential: "GitHub Amaya Token"
     scm_verify_ssl: false
+    scm_update_on_launch: true
     wait: true
 
   - name: "Role: RHSM Registration"
