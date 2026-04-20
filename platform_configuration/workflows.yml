@@ -3,6 +3,7 @@ controller_workflows:
   - name: "WORKFLOW: Leapp-O-Matic RHEL 10 Migration"
     organization: "Default"
     destroy_current_nodes: true
+    ask_limit_on_launch: true
     survey_enabled: true
     survey_spec:
       name: "Host Selection"
