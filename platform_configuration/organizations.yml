@@ -5,3 +5,8 @@ aap_organizations:
 
   - name: Amaya
     description: Amaya Organization
+
+controller_organizations:
+  - name: "Default"
+    galaxy_credentials:
+      - "PAH Galaxy Credential"
