@@ -3,6 +3,24 @@ controller_workflows:
   - name: "WORKFLOW: Leapp-O-Matic RHEL 10 Migration"
     organization: "Default"
     destroy_current_nodes: true
+    survey_enabled: true
+    survey_spec:
+      name: "Host Selection"
+      description: "Select the target hosts for the RHEL 10 migration"
+      spec:
+        - question_name: "Target Hosts"
+          question_description: "Select one or more hosts to upgrade"
+          required: true
+          type: multiselect
+          variable: limit
+          choices: |
+            gazpacho
+            torrezno
+            target1
+            sporcizia
+            spazzina
+            fancazzista
+          default: ""
     workflow_nodes:
       - identifier: "node_preflight"
         unified_job_template:

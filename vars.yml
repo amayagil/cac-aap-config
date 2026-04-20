@@ -18,6 +18,6 @@ gitlab_username: "{{ vault_gitlab_username }}"
 gitlab_token: "{{ vault_gitlab_token }}"
 github_username: "{{ vault_github_username }}"
 github_token: "{{ vault_github_token }}"
-machine_username: "root"
+machine_username: "amaya"
 
 #rhaap_manifest: '{{ lookup("file","/path/to/your/manifest.zip") }}'
