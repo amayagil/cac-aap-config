@@ -15,7 +15,7 @@ controller_templates:
     credentials: ["NUC Machine Credential"]
     ask_limit_on_launch: true
     extra_vars:
-      rhsm_username: "{{ gitlab_username }}" # Usando tu variable de vars.yml
+      rhsm_username: "{{ vault_rhsm_username }}"
       rhsm_password: "{{ vault_rhsm_password }}"
 
   - name: "Leapp: 03 - Insights Registration"
