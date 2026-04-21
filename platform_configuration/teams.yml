@@ -3,4 +3,4 @@ aap_teams:
   - name: acme_operator
     organization: ACME
   - name: amaya
-    organization: Default
+    organization: "{{ cac_controller_organization }}"

@@ -11,6 +11,11 @@
     aap_validate_certs: false
 
   pre_tasks:
+    # Before include_vars: platform YAML may template this name.
+    - name: Controller organization for controller-scoped CaC objects
+      ansible.builtin.set_fact:
+        cac_controller_organization: "{{ cac_controller_organization | default('Default') }}"
+
     - name: Include vars from platform_configuration directory
       ansible.builtin.include_vars:
         dir: ./platform_configuration/

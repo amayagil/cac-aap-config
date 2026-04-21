@@ -20,4 +20,8 @@ github_username: "{{ vault_github_username }}"
 github_token: "{{ vault_github_token }}"
 machine_username: "amaya"
 
+# Optional: organization for controller objects (projects, credentials, workflows, …).
+# If unset, dispatch_config.yml sets this to Default before loading platform_configuration/.
+# cac_controller_organization: Amaya
+
 #rhaap_manifest: '{{ lookup("file","/path/to/your/manifest.zip") }}'
