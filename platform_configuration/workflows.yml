@@ -1,7 +1,7 @@
 ---
 controller_workflows:
   - name: "WORKFLOW: Leapp-O-Matic RHEL 10 Migration"
-    organization: "{{ cac_controller_organization }}"
+    organization: "{{ aap_organization }}"
     destroy_current_nodes: true
     ask_limit_on_launch: true
     survey_enabled: true
@@ -28,7 +28,7 @@ controller_workflows:
           name: "Leapp: 01 - Preflight"
           type: job_template
           organization:
-            name: "{{ cac_controller_organization }}"
+            name: "{{ aap_organization }}"
         related:
           success_nodes:
             - identifier: "node_rhsm"
@@ -40,7 +40,7 @@ controller_workflows:
           name: "Leapp: 02 - RHSM Registration"
           type: job_template
           organization:
-            name: "{{ cac_controller_organization }}"
+            name: "{{ aap_organization }}"
         related:
           success_nodes:
             - identifier: "node_insights"
@@ -52,7 +52,7 @@ controller_workflows:
           name: "Leapp: 03 - Insights Registration"
           type: job_template
           organization:
-            name: "{{ cac_controller_organization }}"
+            name: "{{ aap_organization }}"
         related:
           success_nodes:
             - identifier: "node_upgrade"
@@ -64,7 +64,7 @@ controller_workflows:
           name: "Leapp: 04 - Upgrade Execution"
           type: job_template
           organization:
-            name: "{{ cac_controller_organization }}"
+            name: "{{ aap_organization }}"
         related:
           success_nodes:
             - identifier: "node_post_upgrade"
@@ -76,7 +76,7 @@ controller_workflows:
           name: "Leapp: 05 - Post-Upgrade Verification"
           type: job_template
           organization:
-            name: "{{ cac_controller_organization }}"
+            name: "{{ aap_organization }}"
         related:
           success_nodes: []
           failure_nodes: []

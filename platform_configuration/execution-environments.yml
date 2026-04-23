@@ -2,4 +2,4 @@
 controller_execution_environments:
   - name: ee-ansible-ssa
     image: quay.io/redhat_emp1/ee-ansible-ssa:unstable
-    credential: quay
+    credential: "quay-{{ aap_organization }}"

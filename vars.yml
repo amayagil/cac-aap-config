@@ -1,4 +1,4 @@
-caap_fqdn: ansibol.cibeles.me
+caap_fqdn: freckles.cibeles.me
 # look for ansible-automation-platform-containerized-setup in /tmp (OPTIONAL)
 # caap_install_dir: /tmp
 controller_username: "admin"
@@ -22,6 +22,6 @@ machine_username: "amaya"
 
 # Optional: organization for controller objects (projects, credentials, workflows, …).
 # If unset, dispatch_config.yml sets this to Default before loading platform_configuration/.
-# cac_controller_organization: Amaya
+aap_organization: "Amaya"
 
 #rhaap_manifest: '{{ lookup("file","/path/to/your/manifest.zip") }}'

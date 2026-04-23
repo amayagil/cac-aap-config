@@ -14,7 +14,7 @@
     # Before include_vars: platform YAML may template this name.
     - name: Controller organization for controller-scoped CaC objects
       ansible.builtin.set_fact:
-        cac_controller_organization: "{{ cac_controller_organization | default('Default') }}"
+        aap_organization: "{{ aap_organization | default('Default') }}"
 
     - name: Include vars from platform_configuration directory
       ansible.builtin.include_vars:
@@ -22,17 +22,17 @@
         ignore_files: [controller_config.yml.template]
         extensions: ["yml"]
 
-    - name: "AAP 2.6 | Bridge calculated vars"
-      ansible.builtin.set_fact:
-        gateway_host: "{{ aap_hostname }}"
-        gateway_hostname: "{{ aap_hostname }}"
-        gateway_username: "{{ aap_username }}"
-        gateway_password: "{{ aap_password }}"
-        gateway_validate_certs: "{{ aap_validate_certs }}"
-        controller_hostname: "{{ aap_hostname }}"
-        controller_username: "{{ aap_username }}"
-        controller_password: "{{ aap_password }}"
-        controller_validate_certs: "{{ aap_validate_certs }}"
+    # - name: "AAP 2.6 | Bridge calculated vars"
+    #   ansible.builtin.set_fact:
+    #     gateway_host: "{{ aap_hostname }}"
+    #     gateway_hostname: "{{ aap_hostname }}"
+    #     gateway_username: "{{ aap_username }}"
+    #     gateway_password: "{{ aap_password }}"
+    #     gateway_validate_certs: "{{ aap_validate_certs }}"
+    #     controller_hostname: "{{ aap_hostname }}"
+    #     controller_username: "{{ aap_username }}"
+    #     controller_password: "{{ aap_password }}"
+    #     controller_validate_certs: "{{ aap_validate_certs }}"
 
   roles:
     - infra.aap_configuration.dispatch

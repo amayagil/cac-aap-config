@@ -4,7 +4,7 @@ controller_templates:
     project: "CaC - Configuración de Plataforma"
     playbook: "upgrade_logic/preflight.yml"
     inventory: "NUC Inventory"
-    credentials: ["NUC Machine Credential"]
+    credentials: ["NUC Machine Credential-{{ aap_organization }}"]
     ask_variables_on_launch: true
     ask_limit_on_launch: true
 
@@ -12,7 +12,7 @@ controller_templates:
     project: "CaC - Configuración de Plataforma"
     playbook: "upgrade_logic/run_rhsm.yml"
     inventory: "NUC Inventory"
-    credentials: ["NUC Machine Credential"]
+    credentials: ["NUC Machine Credential-{{ aap_organization }}"]
     ask_limit_on_launch: true
     extra_vars:
       rhsm_username: "{{ vault_rhsm_username }}"
@@ -22,14 +22,14 @@ controller_templates:
     project: "CaC - Configuración de Plataforma"
     playbook: "upgrade_logic/run_insights.yml"
     inventory: "NUC Inventory"
-    credentials: ["NUC Machine Credential"]
+    credentials: ["NUC Machine Credential-{{ aap_organization }}"]
     ask_limit_on_launch: true
 
   - name: "Leapp: 04 - Upgrade Execution"
     project: "CaC - Configuración de Plataforma"
     playbook: "upgrade_logic/run_upgrade.yml"
     inventory: "NUC Inventory"
-    credentials: ["NUC Machine Credential"]
+    credentials: ["NUC Machine Credential-{{ aap_organization }}"]
     ask_limit_on_launch: true
     timeout: 3600
 
@@ -37,5 +37,5 @@ controller_templates:
     project: "CaC - Configuración de Plataforma"
     playbook: "upgrade_logic/post_upgrade.yml"
     inventory: "NUC Inventory"
-    credentials: ["NUC Machine Credential"]
+    credentials: ["NUC Machine Credential-{{ aap_organization }}"]
     ask_limit_on_launch: true

@@ -2,4 +2,4 @@
 controller_inventories:
   - name: "NUC Inventory"
     description: "Inventário para las máquinas virtuales del Cerebellum"
-    organization: "{{ cac_controller_organization }}"
+    organization: "{{ aap_organization }}"

@@ -1,33 +1,32 @@
 ---
 controller_projects:
   - name: "CaC - Configuración de Plataforma"
-    organization: "{{ cac_controller_organization }}"
+    organization: "{{ aap_organization }}"
     scm_type: git
     scm_url: "https://github.com/amayagil/cac-aap-config.git"
     scm_branch: main
-    scm_credential: "GitHub Amaya Token"
+    scm_credential: "GitHub Token-{{ aap_organization }}"
     scm_verify_ssl: false
     scm_update_on_launch: true
     wait: true
 
   - name: "Role: RHSM Registration"
-    organization: "{{ cac_controller_organization }}"
+    organization: "{{ aap_organization }}"
     scm_type: git
     scm_url: "https://gitlab.com/ansible-ssa/role-rhsm-registration.git"
-    scm_credential: "GitLab Amaya Pass"
+    scm_credential: "GitLab Pass-{{ aap_organization }}"
     scm_verify_ssl: false
 
-
   - name: "Role: Insights Registration"
-    organization: "{{ cac_controller_organization }}"
+    organization: "{{ aap_organization }}"
     scm_type: git
     scm_url: "https://gitlab.com/ansible-ssa/role-insights-registration.git"
-    scm_credential: "GitLab Amaya Pass"
+    scm_credential: "GitLab Pass-{{ aap_organization }}"
     scm_verify_ssl: false
 
   - name: "Role: RHEL 10 Upgrader"
-    organization: "{{ cac_controller_organization }}"
+    organization: "{{ aap_organization }}"
     scm_type: git
     scm_url: "https://gitlab.com/ansible-ssa/role-rhel10-upgrader"
-    scm_credential: "GitLab Amaya Pass"
+    scm_credential: "GitLab Pass-{{ aap_organization }}"
     scm_verify_ssl: false
