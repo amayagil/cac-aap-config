@@ -22,17 +22,5 @@
         ignore_files: [controller_config.yml.template]
         extensions: ["yml"]
 
-    # - name: "AAP 2.6 | Bridge calculated vars"
-    #   ansible.builtin.set_fact:
-    #     gateway_host: "{{ aap_hostname }}"
-    #     gateway_hostname: "{{ aap_hostname }}"
-    #     gateway_username: "{{ aap_username }}"
-    #     gateway_password: "{{ aap_password }}"
-    #     gateway_validate_certs: "{{ aap_validate_certs }}"
-    #     controller_hostname: "{{ aap_hostname }}"
-    #     controller_username: "{{ aap_username }}"
-    #     controller_password: "{{ aap_password }}"
-    #     controller_validate_certs: "{{ aap_validate_certs }}"
-
   roles:
     - infra.aap_configuration.dispatch
